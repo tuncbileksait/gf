@@ -1,0 +1,21 @@
+<div class="app">
+  <h1 href="#">GreeceFerries</h1><hr>
+  <h1 *ngIf="isAutheticated && user.email!=null">Welcome {{user.email}}</h1><hr>
+  <ul routerLinkActive="active">
+      <a routerLink="home">Home </a> |
+      <a routerLink="booking">Booking </a> |
+      <a routerLink="about-us">About Us </a> |
+      <a routerLink="blog">Blog </a> |
+      <a routerLink="faq">FAQ</a> |
+      <a routerLink="get-in-touch">Get In Touch </a> |
+      <a *ngIf="!isAutheticated" routerLink="sing-in">Login</a> |
+      <a *ngIf="!isAutheticated" routerLink="sing-up">Register</a> |
+  </ul>
+
+  <button *ngIf="isAutheticated" (click)="logout()" type="button">LogOut</button>
+
+  <br><br><br>
+<div>
+  <router-outlet></router-outlet>
+</div>
+</div>

@@ -1,0 +1,191 @@
+<div id="booking" class="section">
+  <div class="section-center">
+    <div class="container">
+      <div class="booking-form">
+        <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <div class="row form-checkbox">
+              <mat-radio-group
+                formControlName="tripKind"
+                #radioGroup="matRadioGroup"
+                (change)="tripKindChange($event)">
+                <mat-radio-button class="input" [value]=0>Single Route</mat-radio-button>
+                <mat-radio-button class="input" [value]=1>Round Trip</mat-radio-button>
+                <mat-radio-button class="input" [value]=2>Multi Route</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-10">
+              <div formArrayName="routes">
+                <div class="form-group" *ngFor="let trip of getTrips(); let i = index">
+                  <!-- These section is only for round trip -->
+                  <div [formGroupName]="i" *ngIf="tripsCount == 1" >
+                    <div class="row" *ngIf="i==0" >
+                      <div class="col-8">
+                        <div class="row">
+                          <div class="col-6">
+                            <mat-form-field appearance="fill" class="userInputBig">
+                              <mat-label>From</mat-label>
+                              <mat-select
+                                formControlName="origin"
+                                (ngModelChange)="setDestinations($event, i)" >
+                                <div *ngFor="let option of originOptions[i]; let i = index">
+                                  <mat-option [value]="option">{{option.name}}-{{option.country}}</mat-option>
+                                </div>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-6">
+                            <mat-form-field appearance="fill" class="userInputBig">
+                              <mat-label>To</mat-label>
+                              <mat-select
+                                formControlName="destination"
+                                (ngModelChange)="setOrigins($event, i)" >
+                                <div *ngFor="let option of destinatonOptions[i]; let i = index">
+                                  <mat-option [value]="option">{{option.name}}-{{option.country}}</mat-option>
+                                </div>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="row">
+                          <div class="col-6">
+                            <mat-form-field  appearance="fill" class="userDatePickerSingle">
+                              <mat-label>Choose a date</mat-label>
+                              <input
+                                matInput
+                                [matDatepicker]="picker"
+                                [matDatepickerFilter]="dateFilter"
+                                formControlName="date"
+                                [min]="minDateArray[0]"
+                                [max]="maxDateArray[0]"
+                                (dateInput)="dateEvent($event, 0)">
+                              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                              <mat-datepicker
+                              (opened)="datePickerOpened(1)"
+                              #picker></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-6">
+                            <mat-form-field  appearance="fill" class="userDatePickerSingle">
+                              <mat-label>Choose a date</mat-label>
+                              <input
+                                matInput
+                                [matDatepicker]="picker2"
+                                [matDatepickerFilter]="dateFilter"
+                                formControlName="dateReturn"
+                                [min]="minDateArray[1]"
+                                [max]="maxDateArray[1]"
+                                (dateInput)="dateEvent($event, 1)">
+                              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                              <mat-datepicker
+                              (opened)="datePickerOpened(1)"
+                              #picker2></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- These section is for single and multi trips -->
+                  <div [formGroupName]="i" *ngIf="tripsCount != 1 && tripsCount != -1">
+                    <div class="row">
+                      <div class="col-8">
+                        <div class="row">
+                          <div class="col single">
+                            <mat-form-field appearance="fill" class="userInputBig">
+                              <mat-label>From</mat-label>
+                              <mat-select
+                                formControlName="origin"
+                                (ngModelChange)="setDestinations($event, i)" >
+                                <div *ngFor="let option of originOptions[i]; let i = index">
+                                  <mat-option [value]="option">{{option.name}}-{{option.country}}</mat-option>
+                                </div>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <div class="col single">
+                            <mat-form-field appearance="fill" class="userInputBig">
+                              <mat-label>To</mat-label>
+                              <mat-select
+                                formControlName="destination"
+                                (ngModelChange)="setOrigins($event, i)" >
+                                <div *ngFor="let option of destinatonOptions[i]; let i = index">
+                                  <mat-option [value]="option">{{option.name}}-{{option.country}}</mat-option>
+                                </div>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-4" >
+                        <div class="row">
+                          <div class="col-6">
+                            <mat-form-field  appearance="fill" class="userInputBigMulti">
+                              <mat-label>Choose a date</mat-label>
+                              <input
+                                matInput
+                                [matDatepicker]="picker"
+                                [matDatepickerFilter]="dateFilter"
+                                formControlName="date"
+                                [min]="minDateArray[i]"
+                                [max]="maxDateArray[i]"
+                                (dateInput)="dateEvent($event, i)">
+                              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                              <mat-datepicker
+                              (opened)="datePickerOpened(i)"
+                              #picker></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="row">
+                <div class="col-6">
+                  <mat-form-field appearance="fill" class="numberHolder">
+                    <mat-label>Passenger</mat-label>
+                    <mat-select formControlName="passengerCount">
+                      <div *ngFor="let option of passengerCountArray; let i = index">
+                        <mat-option [value]="option">{{ option }}</mat-option>
+                      </div>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-6">
+                  <mat-form-field appearance="fill" class="numberHolder">
+                    <mat-label>Vehicle</mat-label>
+                    <mat-select formControlName="vehicleCount">
+                      <div *ngFor="let option of vehicleCountArray; let i = index">
+                        <mat-option [value]="option">{{ option }}</mat-option>
+                      </div>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <button class="btn btn-outline-secondary" type="submit">Submit</button>
+            <button type="button" class="btn btn-outline-info ml-2" [style.visibility]="tripsCount>1 ? 'visible' : 'hidden'" (click)="addTrip()">Add Trip</button>
+            <button type="button" class="btn btn-outline-danger ml-2" [style.visibility]="tripsCount>2 ? 'visible' : 'hidden'" (click)="removeTrip()">Remove Trip</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<br><hr>
+{{ this.searchForm.value | json }}
+<br><hr>

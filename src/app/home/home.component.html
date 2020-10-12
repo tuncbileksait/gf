@@ -1,0 +1,196 @@
+<!--
+<form (ngSubmit)="onSubmit()" #f="ngForm">
+
+  <div class="row">
+      <mat-radio-group
+          [(ngModel)]="voyageCount"
+          name="voyageCount"
+          #radioGroup="matRadioGroup">
+          <mat-radio-button class="input" [value]=0 [checked]=true>Single Rout</mat-radio-button>
+          <mat-radio-button class="input" [value]=1>Round Trip</mat-radio-button>
+          <mat-radio-button class="input" [value]=2>Multi Rout</mat-radio-button>
+        </mat-radio-group>
+  </div>
+
+  <div class="row">
+      <div class=".col-sm input">
+          <mat-form-field appearance="fill" class="placeHolder">
+              <mat-label>From</mat-label>
+              <mat-select
+                  [(ngModel)]="originTrip1"
+                  name="originTrip1"
+                  (ngModelChange)="setDestinationsTrip1($event)">
+                  <div *ngFor="let option of originOptionsTrip1; let i = index">
+                      <mat-option [value]="option">{{option}}</mat-option>
+                  </div>
+              </mat-select>
+          </mat-form-field>
+      </div>
+
+      <div class=".col-sm input">
+          <mat-form-field appearance="fill" class="placeHolder">
+              <mat-label>To</mat-label>
+              <mat-select
+                  [(ngModel)]="destinatonTrip1"
+                  name="destinatonTrip1"
+                  (ngModelChange)="setOriginsTrip1($event)">
+                  <div *ngFor="let option of destinatonOptionsTrip1; let i = index">
+                      <mat-option [value]="option">{{ option  }}</mat-option>
+                  </div>
+              </mat-select>
+          </mat-form-field>
+      </div>
+
+
+      <div *ngIf="voyageCount!==1" class=".col-sm input">
+          <mat-form-field color="accent" appearance="fill" class="dateHolder">
+              <mat-label>Date</mat-label>
+              <input
+                  matInput
+                  [matDatepickerFilter]="dateFilter"
+                  [matDatepicker]="picker"
+                  ngModel
+                  name="dateFirstTrip">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker ></mat-datepicker>
+          </mat-form-field>
+      </div>
+
+      <div *ngIf="voyageCount===1" class=".col-sm input">
+          <mat-form-field appearance="fill" class="placeHolder">
+              <mat-label>Enter dates</mat-label>
+              <mat-date-range-input [rangePicker]="picker2">
+              <input matStartDate placeholder="Start date" ngModel name="dateFirstTrip">">
+              <input matEndDate placeholder="End date" ngModel name="dateFirstTripBack">
+              </mat-date-range-input>
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker2></mat-date-range-picker>
+          </mat-form-field>
+      </div>
+
+      <div class=".col-sm input">
+          <mat-form-field appearance="fill" class="numberHolder">
+              <mat-label>Passenger</mat-label>
+              <mat-select [(ngModel)]="passengerCount" name="passengerCount">
+                  <div *ngFor="let option of passengerCountArray; let i = index">
+                      <mat-option [value]="option">{{option}}</mat-option>
+                  </div>
+              </mat-select>
+          </mat-form-field>
+      </div>
+
+      <div class=".col-sm input">
+          <mat-form-field appearance="fill" class="numberHolder">
+              <mat-label>Vehicle</mat-label>
+              <mat-select [(ngModel)]="vehicleCount" name="vehicleCount">
+                  <div *ngFor="let option of vehicleCountArray; let i = index">
+                      <mat-option [value]="option">{{option }}</mat-option>
+                  </div>
+              </mat-select>
+          </mat-form-field>
+      </div>
+  </div>
+
+
+  <div class="row" *ngIf="voyageCount>1">
+
+      <div class=".col-sm input">
+          <mat-form-field appearance="fill" class="placeHolder">
+              <mat-label>From</mat-label>
+              <mat-select
+                  [(ngModel)]="originTrip2"
+                  name="originTrip2"
+                  (ngModelChange)="setDestinationsTrip2($event)">
+                  <div *ngFor="let option of originOptionsTrip2; let i = index">
+                      <mat-option [value]="option">{{option}}</mat-option>
+                  </div>
+              </mat-select>
+          </mat-form-field>
+      </div>
+
+      <div class=".col-sm input">
+          <mat-form-field appearance="fill" class="placeHolder">
+              <mat-label>To</mat-label>
+              <mat-select
+                  [(ngModel)]="destinatonTrip2"
+                  name="destinatonTrip2"
+                  (ngModelChange)="setOriginsTrip2($event)">
+                  <div *ngFor="let option of destinatonOptionsTrip2; let i = index">
+                      <mat-option [value]="option">{{ option  }}</mat-option>
+                  </div>
+              </mat-select>
+          </mat-form-field>
+      </div>
+
+
+      <div *ngIf="voyageCount!==1" class=".col-sm input">
+          <mat-form-field color="accent" appearance="fill" class="dateHolder">
+              <mat-label>Date</mat-label>
+              <input
+                  matInput
+                  [matDatepickerFilter]="dateFilter"
+                  [matDatepicker]="picker"
+                  ngModel
+                  name="dateSecondTrip">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker ></mat-datepicker>
+          </mat-form-field>
+      </div>
+
+      <div class=".col-sm input">
+          <button [style.visibility]="voyageCount>1 ? 'visible' : 'hidden'" type="button" (click)="changeRouteCount(-1)">Delete Route</button>
+      </div>
+
+  </div>
+
+  <div class="row" *ngIf="voyageCount>2">
+
+      <div class=".col-sm input">
+      <mat-form-field appearance="fill" class="placeHolder">
+          <mat-label>From</mat-label>
+          <mat-select
+              [(ngModel)]="originTrip3"
+              name="originTrip3"
+              (ngModelChange)="setDestinationsTrip2($event)">
+              <div *ngFor="let option of originOptionsTrip3; let i = index">
+                  <mat-option [value]="option">{{option}}</mat-option>
+              </div>
+          </mat-select>
+      </mat-form-field>
+  </div>
+
+  <div class=".col-sm input">
+      <mat-form-field appearance="fill" class="placeHolder">
+          <mat-label>To</mat-label>
+          <mat-select
+              [(ngModel)]="destinatonTrip3"
+              name="destinatonTrip3"
+              (ngModelChange)="setOriginsTrip3($event)">
+              <div *ngFor="let option of destinatonOptionsTrip3; let i = index">
+                  <mat-option [value]="option">{{ option  }}</mat-option>
+              </div>
+          </mat-select>
+      </mat-form-field>
+  </div>
+
+
+  <div *ngIf="voyageCount!==1" class=".col-sm input">
+      <mat-form-field color="accent" appearance="fill" class="dateHolder">
+          <mat-label>Date</mat-label>
+          <input
+              matInput
+              [matDatepickerFilter]="dateFilter"
+              [matDatepicker]="picker"
+              ngModel
+              name="dateThirdTrip">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker ></mat-datepicker>
+      </mat-form-field>
+  </div>
+
+</div>
+
+  <button type="button" (click)="changeRouteCount(1)" [style.visibility]="voyageCount>1 && voyageCount<3 ? 'visible' : 'hidden'">Add Route</button>
+
+  <button type="submit">Submit</button>
+</form> -->

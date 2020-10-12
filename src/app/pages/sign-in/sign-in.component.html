@@ -1,0 +1,80 @@
+<h1>Login Form</h1>
+<div *ngIf="!isPasswordForgetten && !approvePassword">
+  <form (ngSubmit)="f.form.valid && loginSubmit()" #f="ngForm" name="loginForm" novalidate>
+    <div >
+      <label for="email">email</label>
+      <input type="text" name="email" ngModel email required #email="ngModel"/>
+      <div role="alert" *ngIf="f.submitted && email.invalid">
+        Email is required!
+      </div>
+    </div>
+
+    <div >
+      <label for="password">Password</label>
+      <input type="password" name="password" ngModel required minlength="4" #password="ngModel"/>
+      <div role="alert" *ngIf="f.submitted && password.invalid">
+        <div *ngIf="password.errors.required">Password is required</div>
+        <div *ngIf="password.errors.minlength">
+          Password must be at least 4 characters
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <input type="checkbox" name="remember_me" ngModel>
+      <label for="remember_me">Remember me?</label>
+    </div>
+    <div>
+      <button type="submit" [disabled]="f.form.invalid" >Login</button>
+    </div>
+
+    <div>
+      <div role="alert" *ngIf="f.submitted && errorMessage">
+        Login failed: {{ errorMessage }}
+      </div>
+      <div *ngIf="askingServer">
+        Server controls email and password. Spinner turns...
+      </div>
+    </div>
+    <br><br>
+    <button type="button" (click)="toggleForgettenPassword()">Forget your passsword?</button>
+
+  </form>
+</div>
+
+<div *ngIf="isPasswordForgetten">
+
+  <form (ngSubmit)="f.form.valid && forgettenPasswordSubmit()" #f="ngForm" name="forgettenPasswordForm" novalidate>
+    <div>
+      <label for="email">email</label>
+      <input type="text" name="email" ngModel email required #email="ngModel"/>
+      <div role="alert" *ngIf="f.submitted && email.invalid">
+        Email is required!
+      </div>
+    </div>
+
+    <div>
+      <button type="submit" [disabled]="f.form.invalid">Submit</button>
+    </div>
+  </form>
+</div>
+
+
+<div *ngIf="approvePassword">
+  <a>We have sent a code to your email adress. Please enter the code, and new password.</a>
+
+  <form (ngSubmit)="f.form.valid && aprroveCodeSubmit()" #f="ngForm" name="aprroveCodeForm" novalidate>
+    <div>
+      <label for="code">Code</label>
+      <input type="text" name="code" ngModel required #code="ngModel" placeholder="code" minlength=4>
+      <div role="alert" *ngIf="f.submitted">
+        Please enter the code correctly.
+      </div>
+    </div>
+
+    <div>
+      <button type="submit" [disabled]="code.value < 1000 || code.value > 9999">Submit</button>
+    </div>
+  </form>
+
+</div>

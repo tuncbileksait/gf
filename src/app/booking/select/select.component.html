@@ -1,0 +1,76 @@
+<div class="row">
+  <div *ngFor="let trip of bookingModel.searchParameter.routes">
+    <div class="col">{{ trip.origin }} => {{ trip.destination }}</div>
+  </div>
+</div>
+
+<form [formGroup]="selectForm" (ngSubmit)="onSubmit()">
+
+  <div formArrayName="trips"><br>
+    <div
+      class="form-group"
+      *ngFor="let trip of getTrips(); let tripIndex = index"
+      [formGroupName]="tripIndex"
+      (click)="setSelectedTripId(tripIndex)">
+
+      <br>
+        {{searchRespose[tripIndex].company}} |
+        Cabin: {{searchRespose[tripIndex].availableCabin}} |
+        Garage: {{searchRespose[tripIndex].availableGarage}} |
+        Seats: {{searchRespose[tripIndex].availableSeats}} |
+        {{searchRespose[tripIndex].departureTime}}=>
+        {{searchRespose[tripIndex].arrivalTime}} |
+        Yol Suresi |
+        eTicket:{{searchRespose[tripIndex].eTicketSupport}}====>>
+        price:{{searchRespose[tripIndex].price}}
+
+        <div formArrayName="passengerChoices">
+        <div *ngFor="let choice of getPassengerChoices(trip);  let choiceIndex = index" [formGroupName]="choiceIndex"> <br>
+          <div ></div>
+          <mat-form-field appearance="fill" class="userInputBig">
+            <mat-label>Gender</mat-label>
+            <mat-select
+              formControlName="gender">
+              <div *ngFor="let option of searchRespose[0].gender">
+                <mat-option [value]="option">{{ option }}</mat-option>
+              </div>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="userInputBig">
+            <mat-label>Discounts</mat-label>
+            <mat-select
+              formControlName="discounts">
+              <div *ngFor="let option of searchRespose[0].discounts">
+                <mat-option [value]="option">{{ option }}</mat-option>
+              </div>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="userInputBig">
+            <mat-label>Alternatives</mat-label>
+            <mat-select
+              formControlName="accommodation">
+              <div *ngFor="let alternative of searchRespose[0].accommodationAlternatives">
+                {{alternative.type}}
+                <div *ngFor="let option of alternative.options">
+                  <mat-option [value]="option.name">{{ option.name }} | {{ option.price }}</mat-option>
+                </div>
+              </div>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        </div>
+      <hr>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary">NEXT</button>
+</form>
+
+<br><hr>
+{{ this.selectForm.value | json }}
+<br><hr>
+
+
+<!-- [style.visibility]="selectedTripId==choiceIndex ? 'visible' : 'hidden'" type="button" -->

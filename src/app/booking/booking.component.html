@@ -1,0 +1,11 @@
+
+<div>
+  <button (click)="changePhase(0)" >Search</button>
+  <button (click)="changePhase(1)" >Select</button>
+  <button (click)="changePhase(2)" >Book</button>
+</div>
+
+<br><hr><br>
+<app-search *ngIf="bookingPhase===0"></app-search>
+<app-select *ngIf="bookingPhase===1"></app-select>
+<app-book *ngIf="bookingPhase===2"></app-book>

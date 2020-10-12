@@ -1,0 +1,65 @@
+<h1>Register</h1>
+
+    <form
+      *ngIf="!isRegistrationSuccessful"
+      (ngSubmit)="f.form.valid && onRegistrationSubmit()"
+      #f="ngForm"
+      name="registeriationForm"
+      novalidate>
+
+      <div >
+        <label for="email">Email</label>
+        <input type="email" name="email" ngModel email required #email="ngModel" maxlength="20"/>
+        <div *ngIf="f.submitted && email.invalid">
+          <div *ngIf="email.errors.required">Email is required</div>
+          <div *ngIf="email.errors.email">
+            Email must be a valid email address
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label for="password">Password</label>
+        <input type="password" name="password" ngModel  required minlength="4" maxlength="50" #password="ngModel"/>
+        <div *ngIf="f.submitted && password.invalid">
+          <div *ngIf="password.errors.required">Password is required</div>
+          <div *ngIf="password.errors.minlength">
+            Password must be at least 4 characters
+          </div>
+          <div *ngIf="password.errors.maxlength">
+            Password must be at max 50 characters
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label for="repeatPassword">Repeat Password</label>
+        <input type="password" name="repeatPassword" ngModel required minlength="4" maxlength="50" #repeatPassword="ngModel"/>
+        <div *ngIf="f.submitted && repeatPassword.invalid">
+          <div *ngIf="repeatPassword.errors.required">Password is required</div>
+          <div *ngIf="repeatPassword.errors.minlength">
+            Password must be at least 4 characters
+          </div>
+          <div *ngIf="repeatPassword.errors.maxlength">
+            Password must be at max 50 characters
+          </div>
+        </div>
+        <div [hidden]="password.value == repeatPassword.value || !password.dirty || !repeatPassword.dirty ">Passwords do not match!</div>
+      </div>
+
+      <div >
+        <button [disabled]="password.value != repeatPassword.value || f.form.invalid">Sign Up</button>
+      </div>
+
+      <div *ngIf="f.submitted && errorMessage">
+        Signup failed!<br />{{ errorMessage }}
+      </div>
+    </form>
+
+    <div *ngIf=" isRegistrationSuccessful">
+      Your registration is successful!
+    </div>
+
+    <div *ngIf="askingServer">
+      Spinner turns, checking for email.
+    </div>

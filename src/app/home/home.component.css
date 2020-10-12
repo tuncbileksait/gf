@@ -1,0 +1,29 @@
+.input{
+  margin: 12px 12px 12px 12px;
+}
+
+::ng-deep .placeHolder {
+  margin-bottom: 50px;
+  width: 200px;
+  height: 25px;
+  line-height: 25px;
+  min-height: 25px;
+}
+
+::ng-deep .dateHolder {
+  margin-bottom: 50px;
+  width: 150px;
+  height: 25px;
+  line-height: 25px;
+  min-height: 25px;
+}
+
+::ng-deep .numberHolder {
+  margin-bottom: 50px;
+  width: 120px;
+  height: 25px;
+  line-height: 25px;
+  min-height: 25px;
+}
+
+
